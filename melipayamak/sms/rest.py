@@ -28,6 +28,15 @@ class Rest:
         }
         return self.post(url, {**data, **self.get_data()})
 
+    def send_by_base_number(self, text, to, bodyId):
+        url = self.PATH % ('BaseServiceNumber')
+        data = {
+            'text': text,
+            'to': to,
+            'bodyId': bodyId
+        }
+        return self.post(url, {**data, **self.get_data()})
+    
     def is_delivered(self, recId):
         url = self.PATH % ('GetDeliveries2')
         data = {
