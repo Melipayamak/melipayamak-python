@@ -80,18 +80,18 @@ class Soap:
         return result
 
     def send_by_base_number(self, text, to, bodyId):
-    client = Client(self.sendUrl)
-    data = {
-        'text': text,
-        'to': to,
-        'bodyId': bodyId
-    }
-    result = None
-    if isinstance(text, list):
-        result = client.service.SendByBaseNumber(**self.get_data(), **data)
-    else:
-        result = client.service.SendByBaseNumber2(**self.get_data(), **data)
-    return result
+        client = Client(self.sendUrl)
+        data = {
+            'text': text,
+            'to': to,
+            'bodyId': bodyId
+        }
+        result = None
+        if isinstance(text, list):
+            result = client.service.SendByBaseNumber(**self.get_data(), **data)
+        else:
+            result = client.service.SendByBaseNumber2(**self.get_data(), **data)
+        return result
     
     def get_messages(self, location, index, count, _from=''):
         client = Client(self.sendUrl)
