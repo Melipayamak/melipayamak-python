@@ -178,7 +178,7 @@ class Soap:
         result = client.service.GetInboxCount(**self.get_data(), **data)
         return result
 
-    def send_with_speech(self, to, _from, text, speech):
+    def send_sms_with_speech_text(self, to, _from, text, speech):
         client = Client(self.voiceUrl)
         data = {
             'to': to,
@@ -189,7 +189,31 @@ class Soap:
         result = client.service.SendSMSWithSpeechText(**self.get_data(), **data)
         return result
 
-    def send_with_speech_schdule_date(self, to, _from, text, speech, scheduleDate):
+    def send_bulk_speech_text(self, title, body, receivers, DateToSend, repeatCount):
+        client = Client(self.voiceUrl)
+        data = {
+            'title': title,
+            'body': body,
+            'receivers': receivers,
+            'DateToSend': DateToSend,
+            'repeatCount': repeatCount
+        }
+        result = client.service.SendBulkSpeechText(**self.get_data(), **data)
+        return result
+
+    def send_bulk_voice_sms(self, title, voiceFileId, receivers, DateToSend, repeatCount):
+        client = Client(self.voiceUrl)
+        data = {
+            'title': title,
+            'voiceFileId': voiceFileId,
+            'receivers': receivers,
+            'DateToSend': DateToSend,
+            'repeatCount': repeatCount
+        }
+        result = client.service.SendBulkVoiceSMS(**self.get_data(), **data)
+        return result
+
+    def send_sms_with_speech_schdule_date(self, to, _from, text, speech, scheduleDate):
         client = Client(self.voiceUrl)
         data = {
             'to': to,
@@ -202,13 +226,22 @@ class Soap:
             **self.get_data(), **data)
         return result
 
-    def get_send_with_speech(self, recId):
+    def get_send_sms_with_speech(self, recId):
         client = Client(self.voiceUrl)
         data = {
             'recId': recId
         }
         result = client.service.GetSendSMSWithSpeechTextStatus(
             **self.get_data(), **data)
+        return result
+
+    def upload_voice_file(self, title, base64StringFile):
+        client = Client(self.voiceUrl)
+        data = {
+            'title': title,
+            'base64StringFile': base64StringFile
+        }
+        result = client.service.UploadVoiceFile(**self.get_data(), **data)
         return result
 
     def get_multi_delivery(self, recId):
