@@ -211,6 +211,7 @@ sms_soap.get_schedule_status(schId)
 sms_soap.remove_schedule(schId)
 ```
 
+### وب سرویس پیامک صوتی
 
 ####  ارسال پیامک همراه با تماس صوتی
 ```py
@@ -226,6 +227,22 @@ sms_soap.send_with_speech_schdule_date(to,from,text,speech,schedule_date)
 ```py
 sms_soap.get_send_with_speech(rec_id)
 ```
+
+#### تماس انبوه زماندار
+```py
+sms_soap.send_bulk_speech_text(self, title, body, receivers, DateToSend, repeatCount)
+```
+
+#### تماس انبوه زماندار با انتخاب فایل
+```py
+sms_soap.send_bulk_voice_sms(self, title, voiceFileId, receivers, DateToSend, repeatCount)
+```
+
+#### آپلود فایل صوتی
+```py
+sms_soap.upload_voice_file(self, title, base64StringFile)
+```
+
 ### وب سرویس ارسال انبوه/منطقه ای
 
 #### دریافت شناسه شاخه های بانک شماره
