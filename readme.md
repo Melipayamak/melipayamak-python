@@ -85,6 +85,25 @@ contacts = api.contacts()
 
 ```
 
+<div dir='rtl'>
+
+##### حالت آسنکرون
+برای استفاده از وب سرویس در حالت آسنکرون به صورت زیر اقدام کنید. اطلاعات بیشتر در قالب نمونه پروژه تهیه شده است.
+</div>
+
+```php
+// وب سرویس پیامک
+$smsRestAsync = $api->sms('rest', 'async');
+$smsSoapAsync = $api->sms('soap', 'async');
+// وب سرویس تیکت پشتیبانی
+$ticket = $api->ticketAsync();
+// وب سرویس برای مدیریت کامل  ارسال انبوه پیامک
+$branch = $api->branchAsync();
+//وب سرویس کاربران
+$users = $api->usersAsync();
+//وب سرویس دفترچه تلفن
+$contacts = $api->contactsAsync();
+```
 
 <div dir='rtl'>
 
