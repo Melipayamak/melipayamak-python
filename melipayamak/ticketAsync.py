@@ -1,6 +1,6 @@
 import zeep
-from zeep.asyncio import AsyncTransport
 import asyncio
+from zeep.transports import AsyncTransport
 
 
 class TicketAsync:
@@ -9,7 +9,6 @@ class TicketAsync:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        
 
     def get_data(self):
         return {
@@ -41,7 +40,6 @@ class TicketAsync:
         # print("time: %.2f" % (time.time() - st))
         return result
 
-
     def add(self, title, content, aws=True):
         data = {
             'title': title,
@@ -49,7 +47,6 @@ class TicketAsync:
             'alertWithSms': aws
         }
         return self.makeRequest('AddTicket', {**self.get_data(), **data})
-        
 
     def get_received(self, ticketOwner, ticketType, keyword):
         data = {
@@ -58,14 +55,12 @@ class TicketAsync:
             'keyword': keyword
         }
         return self.makeRequest('GetReceivedTickets', {**self.get_data(), **data})
-        
 
     def get_received_count(self, ticketType):
         data = {
             'ticketType': ticketType,
         }
         return self.makeRequest('GetReceivedTicketsCount', {**self.get_data(), **data})
-
 
     def get_sent(self, ticketOwner, ticketType, keyword):
         data = {
@@ -75,13 +70,11 @@ class TicketAsync:
         }
         return self.makeRequest('GetSentTickets', {**self.get_data(), **data})
 
-
     def get_sent_count(self, ticketType):
         data = {
             'ticketType': ticketType,
         }
         return self.makeRequest('GetSentTicketsCount', {**self.get_data(), **data})
-        
 
     def response(self, ticketId, _type, content, alertWithSms=True):
         data = {
@@ -91,4 +84,3 @@ class TicketAsync:
             'alertWithSms': alertWithSms
         }
         return self.makeRequest('ResponseTicket', {**self.get_data(), **data})
-        
