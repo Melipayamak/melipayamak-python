@@ -1,6 +1,6 @@
 import zeep
-from zeep.asyncio import AsyncTransport
 import asyncio
+from zeep.transports import AsyncTransport
 
 
 class ContactsAsync:
@@ -9,7 +9,6 @@ class ContactsAsync:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        
 
     def get_data(self):
         return {
@@ -48,18 +47,15 @@ class ContactsAsync:
             'showToChilds': showToChilds
         }
         return self.makeRequest('AddGroup', {**self.get_data(), **data})
-        
 
     def add(self, options):
         return self.makeRequest('AddContact', {**self.get_data(), **options})
-        
 
     def check_mobile_exist(self, mobileNumber):
         data = {
             'mobileNumber': mobileNumber
         }
         return self.makeRequest('CheckMobileExistInContact', {**self.get_data(), **data})
-
 
     def get(self, groupId, keyword, _from, count):
         data = {
@@ -70,26 +66,21 @@ class ContactsAsync:
 
         }
         return self.makeRequest('GetContacts', {**self.get_data(), **data})
-        
 
     def get_groups(self):
         return self.makeRequest('GetGroups', self.get_data())
 
-
     def change(self, options):
         return self.makeRequest('ChangeContact', {**self.get_data(), **options})
-
 
     def remove(self, mobilenumber):
         data = {
             'mobileNumber': mobilenumber
         }
         return self.makeRequest('RemoveContact', {**self.get_data(), **data})
-        
 
     def get_events(self, contactId):
         data = {
             'contactId': contactId
         }
         return self.makeRequest('GetContactEvents', {**self.get_data(), **data})
-        
