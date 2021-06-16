@@ -1,5 +1,5 @@
 import zeep
-from zeep.asyncio import AsyncTransport
+from zeep.transports import AsyncTransport
 import asyncio
 # import time
 
