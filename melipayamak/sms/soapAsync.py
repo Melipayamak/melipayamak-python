@@ -199,6 +199,9 @@ class SoapAsync:
         }
         return self.makeRequest(self.sendUrl, 'GetInboxCount', {**data, **self.get_data()})
 
+    def get_outbox_count(self):
+        return self.makeRequest(self.receiveUrl, 'GetOutBoxCount', **self.get_data())
+
     def send_with_speech(self, to, _from, text, speech):
         data = {
             'to': to,

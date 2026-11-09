@@ -207,6 +207,10 @@ class Soap:
         result = client.service.GetInboxCount(**self.get_data(), **data)
         return result
 
+    def get_outbox_count(self):
+        client = Client(self.receiveUrl)
+        return client.service.GetOutBoxCount(**self.get_data())
+
     def send_with_speech(self, to, _from, text, speech):
         client = Client(self.voiceUrl)
         data = {
