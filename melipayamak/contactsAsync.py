@@ -52,7 +52,47 @@ class ContactsAsync:
 
     def add(self, options):
         return self.makeRequest('AddContact', {**self.get_data(), **options})
-        
+
+
+    def add2(self, groupIds, firstname, lastname, gender, corporation, mobilenumber):
+        data = {
+            'groupIds': groupIds,
+            'firstname': firstname,
+            'lastname': lastname,
+            'gender': gender,
+            'corporation': corporation,
+            'mobilenumber': mobilenumber
+        }
+        return self.makeRequest('AddContact2', {**self.get_data(), **data})
+
+    def add_contact_events(self, contactId, eventName, eventType, eventDate):
+        data = {
+            'contactId': contactId,
+            'eventName': eventName,
+            'eventType': eventType,
+            'eventDate': eventDate
+        }
+        return self.makeRequest('AddContactEvents', {**self.get_data(), **data})
+
+    def change_contact2(self, options):
+        return self.makeRequest('ChangeContact2', {**self.get_data(), **options})
+
+    def change_group(self, groupId, groupName, Descriptions, showToChilds, groupStatus):
+        data = {
+            'groupId': groupId,
+            'groupName': groupName,
+            'Descriptions': Descriptions,
+            'showToChilds': showToChilds,
+            'groupStatus': groupStatus
+        }
+        return self.makeRequest('ChangeGroup', {**self.get_data(), **data})
+
+    def remove_contact2(self, contactId, groupId):
+        return self.makeRequest('RemoveContact2', {**self.get_data(), 'contactId':contactId, 'groupId':groupId})
+
+    def remove_group(self, groupId):
+        return self.makeRequest('RemoveGroup', {**self.get_data(), 'groupId':groupId})
+    
 
     def check_mobile_exist(self, mobileNumber):
         data = {
