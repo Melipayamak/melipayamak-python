@@ -107,15 +107,15 @@ class SoapAsync:
 
 
     def send_by_base_number3(self, text, to):
-        return self.makeRequest(self.sendUrl, 'SendByBaseNumber3', {**{'text': text, 'to': to}, **self.get_data()})
+        return self.makeRequest(self.sendUrl, 'SendByBaseNumber3', {**self.get_data(), 'text': text, 'to': to})
         
     
     def send_by_base_number4(self, text, to, bodyId, smsPrice):
-        return self.makeRequest(self.sendUrl, 'SendByBaseNumber4', {**{'text': text, 'to': to, 'bodyId': bodyId, 'smsPrice': smsPrice}, **self.get_data()})
+        return self.makeRequest(self.sendUrl, 'SendByBaseNumber4', {**self.get_data(), 'text': text, 'to': to, 'bodyId': bodyId, 'smsPrice': smsPrice})
     
     
     def send_otp2(self, to, _from, code):
-        return self.makeRequest(self.sendUrl, 'SendOtp2', {**{'to': to, 'from': _from, 'code': code}, **self.get_data()})
+        return self.makeRequest(self.sendUrl, 'SendOtp2', {**self.get_data(), 'to': to, 'from': _from, 'code': code})
     
     
     def send_sms2(self, to, _from, text, isflash=False, udh=''):
