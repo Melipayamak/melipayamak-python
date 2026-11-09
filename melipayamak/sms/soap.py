@@ -92,6 +92,17 @@ class Soap:
         else:
             result = client.service.SendByBaseNumber2(**self.get_data(), **data)
         return result
+
+
+    def send_by_base_number3(self, text, to):
+        client = Client(self.sendUrl)
+        return client.service.SendByBaseNumber3(**self.get_data(), text=text, to=to)
+    
+
+    def send_by_base_number4(self, text, to, bodyId, smsPrice):
+        client = Client(self.sendUrl)
+        return client.service.SendByBaseNumber3(**self.get_data(), text=text, to=to, bodyId=bodyId, smsPrice=smsPrice)
+
     
     def get_messages(self, location, index, count, _from=''):
         client = Client(self.sendUrl)
