@@ -227,6 +227,39 @@ class SoapAsync:
         }
         return self.makeRequest(self.voiceUrl, 'GetSendSMSWithSpeechTextStatus', {**data, **self.get_data()})
 
+    def get_send_speech_text_status(self, recId):
+        return self.makeRequest(self.voiceUrl, 'GetSendSpeechTextStatus', {**self.get_data(), 'recId': recId})
+    
+    def get_send_speech_text_statuses(self, recIds):
+        return self.makeRequest(self.voiceUrl, 'GetSendSpeechTextStatuses', {**self.get_data(), 'recIds': recIds})
+    
+    def send_bulk_speech_text(self, title, body, receivers, dateToSend, repeatCount):
+        data = {
+            'title': title,
+            'body': body,
+            'receivers': receivers,
+            'DateToSend': dateToSend,
+            'RepeatCount': repeatCount
+        }
+        return self.makeRequest(self.voiceUrl, 'SendBulkSpeechText', {**self.get_data(), **data})
+    
+    def send_bulk_voice_sms(self, title, voiceFileId, receivers, dateToSend, repeatCount):
+        data = {
+            'title': title,
+            'voiceFileId': voiceFileId,
+            'receivers': receivers,
+            'DateToSend': dateToSend,
+            'repeatCount': repeatCount
+        }
+        return self.makeRequest(self.voiceUrl, 'SendBulkVoiceSMS', {**self.get_data(), **data})
+    
+    def send_speech_text(self, text, to):
+        return self.makeRequest(self.voiceUrl, 'SendSpeechText', {**self.get_data(), 'text':text, 'to':to})
+    
+    def send_voice_otp(self, to, code):
+        return self.makeRequest(self.voiceUrl, 'SendVoiceOtp', {**self.get_data(), 'to':to, 'code':code})
+    
+
     def get_multi_delivery(self, recId):
         data = {
             'recId': recId

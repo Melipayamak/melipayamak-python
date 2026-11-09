@@ -244,6 +244,46 @@ class Soap:
             **self.get_data(), **data)
         return result
 
+    def get_send_speech_text_status(self, recId):
+        client = Client(self.voiceUrl)
+        return client.service.GetSendSpeechTextStatus(**self.get_data(), recId=recId)
+
+    def get_send_speech_text_statuses(self, recIds):
+        client = Client(self.voiceUrl)
+        return client.service.GetSendSpeechTextStatuses(**self.get_data(), recIds=recIds)
+
+    def send_bulk_speech_text(self, title, body, receivers, dateToSend, repeatCount):
+        client = Client(self.voiceUrl)
+        data = {
+            'title': title,
+            'body': body,
+            'receivers': receivers,
+            'DateToSend': dateToSend,
+            'RepeatCount': repeatCount
+        }
+        return client.service.SendBulkSpeechText(**self.get_data(), **data)
+
+    def send_bulk_voice_sms(self, title, voiceFileId, receivers, dateToSend, repeatCount):
+        client = Client(self.voiceUrl)
+        data = {
+            'title': title,
+            'voiceFileId': voiceFileId,
+            'receivers': receivers,
+            'DateToSend': dateToSend,
+            'repeatCount': repeatCount
+        }
+        return client.service.SendBulkVoiceSMS(**self.get_data(), **data)
+
+    def send_speech_text(self, text, to):
+        client = Client(self.voiceUrl)
+        return client.service.SendSpeechText(**self.get_data(), text=text, to=to)
+
+    def send_voice_otp(self, to, code):
+        client = Client(self.voiceUrl)
+        return client.service.SendVoiceOtp(**self.get_data(), to=to, code=code)
+
+    
+
     def get_multi_delivery(self, recId):
         client = Client(self.sendUrl)
         data = {
