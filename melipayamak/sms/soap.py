@@ -307,3 +307,37 @@ class Soap:
         }
         result = client.service.AddUsance(**self.get_data(), **data)
         return result
+
+    def add_new_usance(self, to, _from, text, isflash, scheduleStartDateTime, countrepeat, scheduleEndDateTime, periodType):
+        client = Client(self.scheduleUrl)
+        data = {
+            'to': to,
+            'from': _from,
+            'text': text,
+            'isflash': isflash,
+            'scheduleStartDateTime': scheduleStartDateTime,
+            'countrepeat': countrepeat,
+            'scheduleEndDateTime': scheduleEndDateTime,
+            'periodType': periodType
+        }
+        return client.service.AddNewUsance(**self.get_data(), **data)
+
+    def add_schedule_send_by_base_number2(self, text, to, bodyId, scheduleDate):
+        client = Client(self.scheduleUrl)
+        data = {
+            'text': text,
+            'to': to,
+            'bodyId': bodyId,
+            'scheduleDate': scheduleDate
+        }
+        return client.service.AddScheduleSendByBaseNumber2(**self.get_data(), **data)
+
+    def get_schedule_details(self, scheduleId):
+        client = Client(self.scheduleUrl)
+        return client.service.GetScheduleDetails(**self.get_data(), scheduleId=scheduleId)
+
+
+    def remove_schedule_list(self, idCollection):
+        client = Client(self.scheduleUrl)
+        ids = idCollection if isinstance(idCollection, list) else [idCollection]
+        return client.service.RemoveScheduleList(**self.get_data(), scheduleIdList=ids)

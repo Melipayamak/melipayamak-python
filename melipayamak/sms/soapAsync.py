@@ -278,3 +278,32 @@ class SoapAsync:
             'scheduleEndDateTime': scheduleEndDateTime
         }
         return self.makeRequest(self.scheduleUrl, 'AddUsance', {**data, **self.get_data()})
+
+    def add_new_usance(self, to, _from, text, isflash, scheduleStartDateTime, countrepeat, scheduleEndDateTime, periodType):
+        data = {
+            'to': to,
+            'from': _from,
+            'text': text,
+            'isflash': isflash,
+            'scheduleStartDateTime': scheduleStartDateTime,
+            'countrepeat': countrepeat,
+            'scheduleEndDateTime': scheduleEndDateTime,
+            'periodType': periodType
+        }
+        return self.makeRequest(self.scheduleUrl, 'AddNewUsance', {**self.get_data(), **data})
+
+    def add_schedule_send_by_base_number2(self, text, to, bodyId, scheduleDate):
+        data = {
+            'text': text,
+            'to': to,
+            'bodyId': bodyId,
+            'scheduleDate': scheduleDate
+        }
+        return self.makeRequest(self.scheduleUrl, 'AddScheduleSendByBaseNumber2', {**self.get_data(), **data})
+
+    def get_schedule_details(self, scheduleId):
+        return self.makeRequest(self.scheduleUrl, 'GetScheduleDetails', {**self.get_data(), 'scheduleId': scheduleId})
+
+    def remove_schedule_list(self, idCollection):
+        ids = idCollection if isinstance(idCollection, list) else [idCollection]
+        return self.makeRequest(self.scheduleUrl, 'RemoveScheduleList', {**self.get_data(), 'scheduleIdList':ids})
