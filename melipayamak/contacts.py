@@ -28,6 +28,46 @@ class Contacts:
         result = self.client.service.AddContact(**self.get_data(), **options)
         return result
 
+    def add2(self, groupIds, firstname, lastname, gender, corporation, mobilenumber):
+        data = {
+            'groupIds': groupIds,
+            'firstname': firstname,
+            'lastname': lastname,
+            'gender': gender,
+            'corporation': corporation,
+            'mobilenumber': mobilenumber
+        }
+        return self.client.service.AddContact2(**self.get_data(), **data)
+
+    def add_contact_events(self, contactId, eventName, eventType, eventDate):
+        data = {
+            'contactId': contactId,
+            'eventName': eventName,
+            'eventType': eventType,
+            'eventDate': eventDate
+        }
+        return self.client.service.AddContactEvents(**self.get_data(), **data)
+
+    def change_contact2(self, options):
+        return self.client.service.ChangeContact2(**self.get_data(), **options)
+
+    def change_group(self, groupId, groupName, Descriptions, showToChilds, groupStatus):
+        data = {
+            'groupId': groupId,
+            'groupName': groupName,
+            'Descriptions': Descriptions,
+            'showToChilds': showToChilds,
+            'groupStatus': groupStatus
+        }
+        return self.client.service.ChangeGroup(**self.get_data(), **data)
+
+    def remove_contact2(self, contactId, groupId):
+        return self.client.service.RemoveContact2(**self.get_data(), contactId=contactId, groupId=groupId)
+
+    def remove_group(self, groupId):
+        return self.client.service.RemoveGroup(**self.get_data(), groupId=groupId)
+
+    
     def check_mobile_exist(self, mobileNumber):
         data = {
             'mobileNumber': mobileNumber
