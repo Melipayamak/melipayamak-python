@@ -40,6 +40,13 @@ pip install asyncio
 	
 	
 #### نحوه استفاده
+
+شما میتوانید [کتابخانۀ ملی پیامک را از pipy هم دریافت کنید](https://pypi.org/project/melipayamak/)
+
+
+`pip install melipayamak`
+
+
 نمونه کد برای ارسال پیامک
 
 
