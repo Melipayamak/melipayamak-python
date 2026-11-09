@@ -162,3 +162,10 @@ class BranchAsync:
             'bulkId': bulkId
         }
         return self.makeRequest('UpdateBulkDelivery', {**self.get_data(), **data})
+
+    def get_multiple_sms3_deliveries(self, idCollection):
+        ids = idCollection if isinstance(idCollection, list) else [idCollection]
+        return self.makeRequest('GetMultipleSMS3Deliveries', {**self.get_data(), 'Id': ids})
+    
+    def get_send_bulk(self):
+        return self.makeRequest('GetSendBulk', self.get_data())

@@ -141,3 +141,10 @@ class Branch:
         result = self.client.service.UpdateBulkDelivery(
             **self.get_data(), **data)
         return result
+
+    def get_multiple_sms3_deliveries(self, idCollection):
+        ids = idCollection if isinstance(idCollection, list) else [idCollection]
+        return self.client.service.GetMultipleSMS3Deliveries(**self.get_data(), Id=ids)
+
+    def get_send_bulk(self):
+        return self.client.service.GetSendBulk(**self.get_data())
