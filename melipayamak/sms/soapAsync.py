@@ -104,6 +104,31 @@ class SoapAsync:
             return self.makeRequest(self.sendUrl, 'SendByBaseNumber', {**data, **self.get_data()})
         else:
             return self.makeRequest(self.sendUrl, 'SendByBaseNumber2', {**data, **self.get_data()})
+
+
+    def send_by_base_number3(self, text, to):
+        return self.makeRequest(self.sendUrl, 'SendByBaseNumber3', {**{'text': text, 'to': to}, **self.get_data()})
+        
+    
+    def send_by_base_number4(self, text, to, bodyId, smsPrice):
+        return self.makeRequest(self.sendUrl, 'SendByBaseNumber4', {**{'text': text, 'to': to, 'bodyId': bodyId, 'smsPrice': smsPrice}, **self.get_data()})
+    
+    
+    def send_otp2(self, to, _from, code):
+        return self.makeRequest(self.sendUrl, 'SendOtp2', {**{'to': to, 'from': _from, 'code': code}, **self.get_data()})
+    
+    
+    def send_sms2(self, to, _from, text, isflash=False, udh=''):
+        to = to if isinstance(to, list) else [to]
+        data = {
+            'from': _from,
+            'text': text,
+            'isflash': isflash,
+            'to': to,
+            'udh': udh
+        }
+        return self.makeRequest(self.sendUrl, 'SendSms2', {**data, **self.get_data()})
+    
     
     def get_messages(self, location, index, count, _from=''):
         data = {
