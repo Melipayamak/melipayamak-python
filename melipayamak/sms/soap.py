@@ -101,8 +101,26 @@ class Soap:
 
     def send_by_base_number4(self, text, to, bodyId, smsPrice):
         client = Client(self.sendUrl)
-        return client.service.SendByBaseNumber3(**self.get_data(), text=text, to=to, bodyId=bodyId, smsPrice=smsPrice)
+        return client.service.SendByBaseNumber4(**self.get_data(), text=text, to=to, bodyId=bodyId, smsPrice=smsPrice)
 
+
+    def send_otp2(self, to, _from, code):
+        client = Client(self.sendUrl)
+        return client.service.SendOtp2(**self.get_data(), to=to, **{'from': _from}, code=code)
+
+
+    def send_sms2(self, to, _from, text, isflash=False, udh=''):
+        client = Client(self.sendUrl)
+        to = to if isinstance(to, list) else [to]
+        data = {
+            'from': _from,
+            'text': text,
+            'isflash': isflash,
+            'to': to,
+            'udh': udh
+        }
+        return client.service.SendSms2(**self.get_data(), **data)
+    
     
     def get_messages(self, location, index, count, _from=''):
         client = Client(self.sendUrl)
