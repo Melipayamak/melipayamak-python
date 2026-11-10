@@ -25,6 +25,7 @@
 
 ```
 pip install zeep
+pip install zeep[async]
 pip install requests
 
 //following for async
@@ -78,16 +79,16 @@ print(response)
 </div>
 
 ```py
-// وب سرویس پیامک
+# وب سرویس پیامک
 sms_rest = api.sms()
 sms_soap = api.sms('soap')
-// وب سرویس تیکت پشتیبانی
+# وب سرویس تیکت پشتیبانی
 ticket = api.ticket()
-// وب سرویس برای مدیریت کامل  ارسال انبوه پیامک
+# وب سرویس برای مدیریت کامل  ارسال انبوه پیامک
 branch = api.branch()
-//وب سرویس کاربران
+# وب سرویس کاربران
 users = api.users()
-//وب سرویس دفترچه تلفن
+# وب سرویس دفترچه تلفن
 contacts = api.contacts()
 
 ```
@@ -98,18 +99,33 @@ contacts = api.contacts()
 برای استفاده از وب سرویس در حالت آسنکرون به صورت زیر اقدام کنید. اطلاعات بیشتر در قالب نمونه پروژه تهیه شده است.
 </div>
 
-```php
-// وب سرویس پیامک
-$smsRestAsync = $api->sms('rest', 'async');
-$smsSoapAsync = $api->sms('soap', 'async');
-// وب سرویس تیکت پشتیبانی
-$ticket = $api->ticketAsync();
-// وب سرویس برای مدیریت کامل  ارسال انبوه پیامک
-$branch = $api->branchAsync();
-//وب سرویس کاربران
-$users = $api->usersAsync();
-//وب سرویس دفترچه تلفن
-$contacts = $api->contactsAsync();
+```py
+import asyncio
+from melipayamak.sms.soapAsync import SoapAsync
+
+
+async def main():
+    username = 'username'
+    password = 'password'
+
+    sms_soap = SoapAsync(username, password)
+
+    # Test account credit
+    result = await sms_soap.get_credit()
+    print(result)
+
+    # Test sending SMS
+    to = '09123456789'
+    _from = '5000xxx'
+    text = 'Test message'
+
+    result = await sms_soap.send(to, _from, text)
+    print(result)
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+
 ```
 
 <div dir='rtl'>

@@ -1,6 +1,6 @@
+import httpx
 import zeep
 from zeep.transports import AsyncTransport
-import asyncio
 
 
 class UsersAsync:
@@ -17,117 +17,112 @@ class UsersAsync:
             'password': self.password
         }
 
-    def makeRequest(self, func, data):
-        result = []
+    async def makeRequest(self, func, data):
+        # Zeep uses the synchronous client to load the WSDL and imported
+        # schemas, and the asynchronous client for SOAP operations.
+        wsdl_client = httpx.Client(follow_redirects=True)
+        async_client = httpx.AsyncClient(follow_redirects=True)
 
-        def handle_future(future):
-            result.extend(future.result())
+        transport = AsyncTransport(
+            client=async_client,
+            wsdl_client=wsdl_client,
+            cache=None,
+        )
 
-        loop = asyncio.get_event_loop()
-
-        transport = AsyncTransport(loop, cache=None)
-        client = zeep.Client(self.PATH, transport=transport)
-
-        tasks = [
-            getattr(client.service, func)(**data)
-        ]
-        future = asyncio.gather(*tasks, return_exceptions=True)
-
-        future.add_done_callback(handle_future)
-
-        # st = time.time()
-        loop.run_until_complete(future)
-        loop.run_until_complete(transport.session.close())
-        # print("time: %.2f" % (time.time() - st))
-        return result
+        try:
+            client = zeep.AsyncClient(self.PATH, transport=transport)
+            operation = getattr(client.service, func)
+            return await operation(**data)
+        finally:
+            await transport.aclose()
 
 
-    def add_payment(self, options):
-        return self.makeRequest('AddPayment', {**self.get_data(), **options})
+    async def add_payment(self, options):
+        return await self.makeRequest('AddPayment', {**self.get_data(), **options})
         
 
-    def add(self, options):
-        return self.makeRequest('AddUser', {**self.get_data(), **options})
+    async def add(self, options):
+        return await self.makeRequest('AddUser', {**self.get_data(), **options})
 
 
-    def add_complete(self, options):
-        return self.makeRequest('AddUserComplete', {**self.get_data(), **options})
+    async def add_complete(self, options):
+        return await self.makeRequest('AddUserComplete', {**self.get_data(), **options})
         
 
-    def add_with_location(self, options):
-        return self.makeRequest('AddUserWithLocation', {**self.get_data(), **options})
+    async def add_with_location(self, options):
+        return await self.makeRequest('AddUserWithLocation', {**self.get_data(), **options})
         
 
-    def authenticate(self):
-        return self.makeRequest('AuthenticateUser', self.get_data())
+    async def authenticate(self):
+        return await self.makeRequest('AuthenticateUser', self.get_data())
 
-    def change_credit(self, amount, description, targetUsername, GetTax):
+    async def change_credit(self, amount, description, targetUsername, GetTax):
         data = {
             'amount': amount,
             'description': description,
             'targetUsername': targetUsername,
             'GetTax': GetTax
         }
-        return self.makeRequest('ChangeUserCredit', {**self.get_data(), **data})
+        return await self.makeRequest('ChangeUserCredit', {**self.get_data(), **data})
 
 
-    def forgot_password(self, mobileNumber, emailAddress, targetUsername):
+    async def forgot_password(self, mobileNumber, emailAddress, targetUsername):
         data = {
             'mobileNumber': mobileNumber,
             'emailAddress': emailAddress,
             'targetUsername': targetUsername
         }
-        return self.makeRequest('ForgotPassword', {**self.get_data(), **data})
+        return await self.makeRequest('ForgotPassword', {**self.get_data(), **data})
 
 
-    def get_base_price(self, targetUsername):
+    async def get_base_price(self, targetUsername):
         data = {
             'targetUsername': targetUsername
         }
-        return self.makeRequest('GetUserBasePrice', {**self.get_data(), **data})
+        return await self.makeRequest('GetUserBasePrice', {**self.get_data(), **data})
 
 
-    def remove(self, targetUsername):
+    async def remove(self, targetUsername):
         data = {
             'targetUsername': targetUsername
         }
-        return self.makeRequest('RemoveUser', {**self.get_data(), **data})
+        return await self.makeRequest('RemoveUser', {**self.get_data(), **data})
 
 
-    def get_credit(self, targetUsername):
+    async def get_credit(self, targetUsername):
         data = {
             'targetUsername': targetUsername
         }
-        return self.makeRequest('GetUserCredit', {**self.get_data(), **data})
+        return await self.makeRequest('GetUserCredit', {**self.get_data(), **data})
 
 
-    def get_details(self, targetUsername):
+    async def get_details(self, targetUsername):
         data = {
             'targetUsername': targetUsername
         }
-        return self.makeRequest('GetUserDetails', {**self.get_data(), **data})
+        return await self.makeRequest('GetUserDetails', {**self.get_data(), **data})
 
 
-    def get_numbers(self):
-        return self.makeRequest('GetUserNumbers', self.get_data())
+    async def get_numbers(self):
+        return await self.makeRequest('GetUserNumbers', self.get_data())
         
 
-    def get_provinces(self):
-        return self.makeRequest('GetProvinces', self.get_data())
+    async def get_provinces(self):
+        return await self.makeRequest('GetProvinces', self.get_data())
         
 
-    def get_cities(self, provinceId):
+    async def get_cities(self, provinceId):
         data = {
             'provinceId': provinceId
         }
-        return self.makeRequest('GetCities', {**self.get_data(), **data})
+        return await self.makeRequest('GetCities', {**self.get_data(), **data})
 
 
-    def get_expire_date(self):
-        return self.makeRequest('GetExpireDate', self.get_data())
+    async def get_expire_date(self):
+        return await self.makeRequest('GetExpireDate', self.get_data())
         
 
-    def get_transactions(self, targetUsername, creditType, dateFrom, dateTo, keyword):
+    async def get_transactions(self, targetUsername, creditType, dateFrom, dateTo, keyword):
         data = {
             'targetUsername': targetUsername,
             'creditType': creditType,
@@ -135,15 +130,15 @@ class UsersAsync:
             'dateTo': dateTo,
             'keyword': keyword
         }
-        return self.makeRequest('GetUserTransactions', {**self.get_data(), **data})
+        return await self.makeRequest('GetUserTransactions', {**self.get_data(), **data})
         
 
-    def get(self):
-        return self.makeRequest('GetUsers', self.get_data())
+    async def get(self):
+        return await self.makeRequest('GetUsers', self.get_data())
         
 
-    def has_filter(self, text):
+    async def has_filter(self, text):
         data = {
             'text': text
         }
-        return self.makeRequest('HasFilter', {**self.get_data(), **data})
+        return await self.makeRequest('HasFilter', {**self.get_data(), **data})

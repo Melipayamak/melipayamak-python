@@ -1,6 +1,6 @@
+import httpx
 import zeep
 from zeep.transports import AsyncTransport
-import asyncio
 
 
 class ContactsAsync:
@@ -17,44 +17,40 @@ class ContactsAsync:
             'password': self.password
         }
 
-    def makeRequest(self, func, data):
-        result = []
+    async def makeRequest(self, func, data):
+        # Zeep uses the synchronous client to load the WSDL and imported
+        # schemas, and the asynchronous client for SOAP operations.
+        wsdl_client = httpx.Client(follow_redirects=True)
+        async_client = httpx.AsyncClient(follow_redirects=True)
 
-        def handle_future(future):
-            result.extend(future.result())
+        transport = AsyncTransport(
+            client=async_client,
+            wsdl_client=wsdl_client,
+            cache=None,
+        )
 
-        loop = asyncio.get_event_loop()
+        try:
+            client = zeep.AsyncClient(self.PATH, transport=transport)
+            operation = getattr(client.service, func)
+            return await operation(**data)
+        finally:
+            await transport.aclose()
 
-        transport = AsyncTransport(loop, cache=None)
-        client = zeep.Client(self.PATH, transport=transport)
-
-        tasks = [
-            getattr(client.service, func)(**data)
-        ]
-        future = asyncio.gather(*tasks, return_exceptions=True)
-
-        future.add_done_callback(handle_future)
-
-        # st = time.time()
-        loop.run_until_complete(future)
-        loop.run_until_complete(transport.session.close())
-        # print("time: %.2f" % (time.time() - st))
-        return result
-
-    def add_group(self, groupName, Descriptions, showToChilds):
+    
+    async def add_group(self, groupName, Descriptions, showToChilds):
         data = {
             'groupName': groupName,
             'Descriptions': Descriptions,
             'showToChilds': showToChilds
         }
-        return self.makeRequest('AddGroup', {**self.get_data(), **data})
+        return await self.makeRequest('AddGroup', {**self.get_data(), **data})
         
 
-    def add(self, options):
-        return self.makeRequest('AddContact', {**self.get_data(), **options})
+    async def add(self, options):
+        return await self.makeRequest('AddContact', {**self.get_data(), **options})
 
 
-    def add2(self, groupIds, firstname, lastname, gender, corporation, mobilenumber):
+    async def add2(self, groupIds, firstname, lastname, gender, corporation, mobilenumber):
         data = {
             'groupIds': groupIds,
             'firstname': firstname,
@@ -63,21 +59,21 @@ class ContactsAsync:
             'corporation': corporation,
             'mobilenumber': mobilenumber
         }
-        return self.makeRequest('AddContact2', {**self.get_data(), **data})
+        return await self.makeRequest('AddContact2', {**self.get_data(), **data})
 
-    def add_contact_events(self, contactId, eventName, eventType, eventDate):
+    async def add_contact_events(self, contactId, eventName, eventType, eventDate):
         data = {
             'contactId': contactId,
             'eventName': eventName,
             'eventType': eventType,
             'eventDate': eventDate
         }
-        return self.makeRequest('AddContactEvents', {**self.get_data(), **data})
+        return await self.makeRequest('AddContactEvents', {**self.get_data(), **data})
 
-    def change_contact2(self, options):
-        return self.makeRequest('ChangeContact2', {**self.get_data(), **options})
+    async def change_contact2(self, options):
+        return await self.makeRequest('ChangeContact2', {**self.get_data(), **options})
 
-    def change_group(self, groupId, groupName, Descriptions, showToChilds, groupStatus):
+    async def change_group(self, groupId, groupName, Descriptions, showToChilds, groupStatus):
         data = {
             'groupId': groupId,
             'groupName': groupName,
@@ -85,23 +81,23 @@ class ContactsAsync:
             'showToChilds': showToChilds,
             'groupStatus': groupStatus
         }
-        return self.makeRequest('ChangeGroup', {**self.get_data(), **data})
+        return await self.makeRequest('ChangeGroup', {**self.get_data(), **data})
 
-    def remove_contact2(self, contactId, groupId):
-        return self.makeRequest('RemoveContact2', {**self.get_data(), 'contactId':contactId, 'groupId':groupId})
+    async def remove_contact2(self, contactId, groupId):
+        return await self.makeRequest('RemoveContact2', {**self.get_data(), 'contactId':contactId, 'groupId':groupId})
 
-    def remove_group(self, groupId):
-        return self.makeRequest('RemoveGroup', {**self.get_data(), 'groupId':groupId})
+    async def remove_group(self, groupId):
+        return await self.makeRequest('RemoveGroup', {**self.get_data(), 'groupId':groupId})
     
 
-    def check_mobile_exist(self, mobileNumber):
+    async def check_mobile_exist(self, mobileNumber):
         data = {
             'mobileNumber': mobileNumber
         }
-        return self.makeRequest('CheckMobileExistInContact', {**self.get_data(), **data})
+        return await self.makeRequest('CheckMobileExistInContact', {**self.get_data(), **data})
 
 
-    def get(self, groupId, keyword, _from, count):
+    async def get(self, groupId, keyword, _from, count):
         data = {
             'groupId': groupId,
             'keyword': keyword,
@@ -109,27 +105,27 @@ class ContactsAsync:
             'count': count
 
         }
-        return self.makeRequest('GetContacts', {**self.get_data(), **data})
+        return await self.makeRequest('GetContacts', {**self.get_data(), **data})
         
 
-    def get_groups(self):
-        return self.makeRequest('GetGroups', self.get_data())
+    async def get_groups(self):
+        return await self.makeRequest('GetGroups', self.get_data())
 
 
-    def change(self, options):
-        return self.makeRequest('ChangeContact', {**self.get_data(), **options})
+    async def change(self, options):
+        return await self.makeRequest('ChangeContact', {**self.get_data(), **options})
 
 
-    def remove(self, mobilenumber):
+    async def remove(self, mobilenumber):
         data = {
             'mobileNumber': mobilenumber
         }
-        return self.makeRequest('RemoveContact', {**self.get_data(), **data})
+        return await self.makeRequest('RemoveContact', {**self.get_data(), **data})
         
 
-    def get_events(self, contactId):
+    async def get_events(self, contactId):
         data = {
             'contactId': contactId
         }
-        return self.makeRequest('GetContactEvents', {**self.get_data(), **data})
+        return await self.makeRequest('GetContactEvents', {**self.get_data(), **data})
         

@@ -1,6 +1,6 @@
+import httpx
 import zeep
 from zeep.transports import AsyncTransport
-import asyncio
 
 
 class BranchAsync:
@@ -17,60 +17,55 @@ class BranchAsync:
             'password': self.password
         }
 
-    def makeRequest(self, func, data):
-        result = []
+    async def makeRequest(self, func, data):
+        # Zeep uses the synchronous client to load the WSDL and imported
+        # schemas, and the asynchronous client for SOAP operations.
+        wsdl_client = httpx.Client(follow_redirects=True)
+        async_client = httpx.AsyncClient(follow_redirects=True)
 
-        def handle_future(future):
-            result.extend(future.result())
+        transport = AsyncTransport(
+            client=async_client,
+            wsdl_client=wsdl_client,
+            cache=None,
+        )
 
-        loop = asyncio.get_event_loop()
-
-        transport = AsyncTransport(loop, cache=None)
-        client = zeep.Client(self.PATH, transport=transport)
-
-        tasks = [
-            getattr(client.service, func)(**data)
-        ]
-        future = asyncio.gather(*tasks, return_exceptions=True)
-
-        future.add_done_callback(handle_future)
-
-        # st = time.time()
-        loop.run_until_complete(future)
-        loop.run_until_complete(transport.session.close())
-        # print("time: %.2f" % (time.time() - st))
-        return result
+        try:
+            client = zeep.AsyncClient(self.PATH, transport=transport)
+            operation = getattr(client.service, func)
+            return await operation(**data)
+        finally:
+            await transport.aclose()
 
 
-    def get(self, owner):
+    async def get(self, owner):
         data = {
             'owner': owner
         }
-        return self.makeRequest('GetBranchs', {**self.get_data(), **data})
+        return await self.makeRequest('GetBranchs', {**self.get_data(), **data})
 
-    def remove(self, branchId):
+    async def remove(self, branchId):
         data = {
             'branchId': branchId
         }
-        return self.makeRequest('RemoveBranch', {**self.get_data(), **data})
+        return await self.makeRequest('RemoveBranch', {**self.get_data(), **data})
 
-    def add(self, branchName, owner):
+    async def add(self, branchName, owner):
         data = {
             'branchName': branchName,
             'owner': owner
         }
-        return self.makeRequest('AddBranch', {**self.get_data(), **data})
+        return await self.makeRequest('AddBranch', {**self.get_data(), **data})
         
 
-    def add_number(self, mobileNumbers, branchId):
+    async def add_number(self, mobileNumbers, branchId):
         data = {
             'mobileNumbers': mobileNumbers,
             'branchId': branchId
         }
-        return self.makeRequest('AddNumber', {**self.get_data(), **data})
+        return await self.makeRequest('AddNumber', {**self.get_data(), **data})
         
 
-    def send_bulk(self, _from, title, message, branch, DateToSend, requestCount, bulkType, rowFrom, rangeFrom, rangeTo):
+    async def send_bulk(self, _from, title, message, branch, DateToSend, requestCount, bulkType, rowFrom, rangeFrom, rangeTo):
         data = {
             'from': _from,
             'title': title,
@@ -83,10 +78,10 @@ class BranchAsync:
             'rangeFrom': rangeFrom,
             'rangeTo': rangeTo
         }
-        return self.makeRequest('AddBulk', {**self.get_data(), **data})
+        return await self.makeRequest('AddBulk', {**self.get_data(), **data})
         
 
-    def sendBulk2(self, _from, title, message, branch, DateToSend, requestCount, bulkType, rowFrom, rangeFrom, rangeTo):
+    async def sendBulk2(self, _from, title, message, branch, DateToSend, requestCount, bulkType, rowFrom, rangeFrom, rangeTo):
         data = {
             'from': _from,
             'title': title,
@@ -99,49 +94,49 @@ class BranchAsync:
             'rangeFrom': rangeFrom,
             'rangeTo': rangeTo
         }
-        return self.makeRequest('AddBulk2', {**self.get_data(), **data})
+        return await self.makeRequest('AddBulk2', {**self.get_data(), **data})
         
 
-    def get_bulk_count(self, branch, rangeFrom, rangeTo):
+    async def get_bulk_count(self, branch, rangeFrom, rangeTo):
         data = {
             'branch': branch,
             'rangeFrom': rangeFrom,
             'rangeTo': rangeTo
         }
-        return self.makeRequest('GetBulkCount', {**self.get_data(), **data})
+        return await self.makeRequest('GetBulkCount', {**self.get_data(), **data})
         
 
-    def get_bulk_receptions(self, bulkId, fromRows):
+    async def get_bulk_receptions(self, bulkId, fromRows):
         data = {
             'bulkId': bulkId,
             'fromRows': fromRows
         }
-        return self.makeRequest('GetBulkReceptions', {**self.get_data(), **data})
+        return await self.makeRequest('GetBulkReceptions', {**self.get_data(), **data})
         
 
-    def get_bulk_status(self, bulkId):
+    async def get_bulk_status(self, bulkId):
         data = {
             'bulkId': bulkId
         }
-        return self.makeRequest('GetBulkStatus', {**self.get_data(), **data})
+        return await self.makeRequest('GetBulkStatus', {**self.get_data(), **data})
         
 
-    def get_today_sent(self):
-        return self.makeRequest('GetTodaySent', self.get_data())
+    async def get_today_sent(self):
+        return await self.makeRequest('GetTodaySent', self.get_data())
 
 
-    def get_total_sent(self):
-        return self.makeRequest('GetTotalSent', self.get_data())
+    async def get_total_sent(self):
+        return await self.makeRequest('GetTotalSent', self.get_data())
         
 
-    def remove_bulk(self, bulkId):
+    async def remove_bulk(self, bulkId):
         data = {
             'bulkId': bulkId
         }
-        return self.makeRequest('RemoveBulk', {**self.get_data(), **data})
+        return await self.makeRequest('RemoveBulk', {**self.get_data(), **data})
         
 
-    def send_multiple_sms(self, to, _from, text, isflash, udh):
+    async def send_multiple_sms(self, to, _from, text, isflash, udh):
         data = {
             'to': to,
             'from': _from,
@@ -151,21 +146,21 @@ class BranchAsync:
         }
         
         if isinstance(_from, list):
-            return self.makeRequest('SendMultipleSMS2', {**self.get_data(), **data})
+            return await self.makeRequest('SendMultipleSMS2', {**self.get_data(), **data})
             
         else:
-            return self.makeRequest('SendMultipleSMS', {**self.get_data(), **data})
+            return await self.makeRequest('SendMultipleSMS', {**self.get_data(), **data})
         
 
-    def update_bulk_delivery(self, bulkId):
+    async def update_bulk_delivery(self, bulkId):
         data = {
             'bulkId': bulkId
         }
-        return self.makeRequest('UpdateBulkDelivery', {**self.get_data(), **data})
+        return await self.makeRequest('UpdateBulkDelivery', {**self.get_data(), **data})
 
-    def get_multiple_sms3_deliveries(self, idCollection):
+    async def get_multiple_sms3_deliveries(self, idCollection):
         ids = idCollection if isinstance(idCollection, list) else [idCollection]
-        return self.makeRequest('GetMultipleSMS3Deliveries', {**self.get_data(), 'Id': ids})
+        return await self.makeRequest('GetMultipleSMS3Deliveries', {**self.get_data(), 'Id': ids})
     
-    def get_send_bulk(self):
-        return self.makeRequest('GetSendBulk', self.get_data())
+    async def get_send_bulk(self):
+        return await self.makeRequest('GetSendBulk', self.get_data())
