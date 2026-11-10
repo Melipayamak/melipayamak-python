@@ -1,6 +1,12 @@
 # Melipayamak Python
 
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/melipayamakwebservice.svg)](https://pypi.org/project/melipayamakwebservice/)
+![Status](https://img.shields.io/badge/Status-Stable-brightgreen)
+[![Downloads](https://img.shields.io/pypi/dm/melipayamakwebservice.svg)](https://pypi.org/project/melipayamakwebservice/)
+
 <div dir='rtl'>
 
 ### معرفی وب سرویس ملی پیامک
@@ -25,10 +31,10 @@
 
 ```
 pip install zeep
-pip install zeep[async]
 pip install requests
 
-//following for async
+# for async
+pip install zeep[async]
 pip install aiohttp
 pip install asyncio
 ```
