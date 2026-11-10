@@ -7,6 +7,12 @@ from .ticket import Ticket
 from .ticketAsync import TicketAsync
 from .contacts import Contacts
 from .contactsAsync import ContactsAsync
+from .newBulk import NewBulk
+from .newBulkAsync import NewBulkAsync
+from .blackList import BlackList
+from .blackListAsync import BlackListAsync
+from .smart import Smart
+from .smartAsync import SmartAsync
 
 
 class Api:
@@ -49,3 +55,21 @@ class Api:
 
     def contactsAsync(self):
         return ContactsAsync(self.username, self.password)
+
+    def newBulk(self):
+        return NewBulk(self.username, self.password)
+
+    def newBulkAsync(self):
+        return NewBulkAsync(self.username, self.password)
+
+    def blackList(self):
+        return BlackList(self.username, self.password)
+
+    def blackListAsync(self):
+        return BlackListAsync(self.username, self.password)
+
+    def smart(self):
+        return Smart(self.username, self.password)
+
+    def smartAsync(self):
+        return SmartAsync(self.username, self.password)

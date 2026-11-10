@@ -1,7 +1,7 @@
 from zeep import Client
 
 
-class Branch:
+class BlackList:
     PATH = "http://api.payamak-panel.com/post/blacklist.asmx?wsdl"
 
     def __init__(self, username, password):

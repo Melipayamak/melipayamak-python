@@ -1,7 +1,7 @@
 from zeep import Client
 
 
-class Branch:
+class Smart:
     PATH = "http://api.payamak-panel.com/post/Smartsms.asmx?wsdl"
 
     def __init__(self, username, password):

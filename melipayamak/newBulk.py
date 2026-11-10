@@ -1,7 +1,7 @@
 from zeep import Client
 
 
-class Ticket:
+class NewBulk:
     PATH = 'http://api.payamak-panel.com/post/newbulks.asmx?wsdl'
 
     def __init__(self, username, password):

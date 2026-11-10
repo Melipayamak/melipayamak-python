@@ -3,7 +3,7 @@ import zeep
 from zeep.transports import AsyncTransport
 
 
-class BranchAsync:
+class BlackListAsync:
     PATH = "http://api.payamak-panel.com/post/blacklist.asmx?wsdl"
 
     def __init__(self, username, password):

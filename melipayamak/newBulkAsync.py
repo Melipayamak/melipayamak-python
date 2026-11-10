@@ -3,7 +3,7 @@ import zeep
 from zeep.transports import AsyncTransport
 
 
-class TicketAsync:
+class NewBulkAsync:
     PATH = 'http://api.payamak-panel.com/post/newbulks.asmx?wsdl'
 
     def __init__(self, username, password):

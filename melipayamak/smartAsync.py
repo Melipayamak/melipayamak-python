@@ -3,7 +3,7 @@ import zeep
 from zeep.transports import AsyncTransport
 
 
-class BranchAsync:
+class SmartAsync:
     PATH = "http://api.payamak-panel.com/post/Smartsms.asmx?wsdl"
 
     def __init__(self, username, password):
