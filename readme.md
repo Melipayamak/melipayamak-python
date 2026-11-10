@@ -51,7 +51,9 @@ pip install asyncio
 شما میتوانید [کتابخانۀ ملی پیامک را از pipy هم دریافت کنید](https://pypi.org/project/melipayamak/)
 
 
-`pip install melipayamak`
+```bash
+pip install melipayamak
+```
 
 
 نمونه کد برای ارسال پیامک
