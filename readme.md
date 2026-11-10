@@ -87,7 +87,7 @@ print(response)
 </div>
 
 ```py
-# وب سرویس پیامک
+
 sms_rest = api.sms()
 sms_soap = api.sms('soap')
 # وب سرویس تیکت پشتیبانی
