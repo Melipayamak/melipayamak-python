@@ -95,6 +95,9 @@ class UsersAsync:
         }
         return await self.makeRequest('GetUserCredit', {**self.get_data(), **data})
 
+    async def get_credit2(self):
+        return await self.makeRequest('GetUserCredit2', self.get_data())
+
 
     async def get_details(self, targetUsername):
         data = {
@@ -120,6 +123,9 @@ class UsersAsync:
 
     async def get_expire_date(self):
         return await self.makeRequest('GetExpireDate', self.get_data())
+
+    async def get_en_expire_date(self):
+        return await self.makeRequest('GetEnExpireDate', self.get_data())
         
 
     async def get_transactions(self, targetUsername, creditType, dateFrom, dateTo, keyword):

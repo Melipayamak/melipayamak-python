@@ -77,6 +77,9 @@ class Users:
         result = self.client.service.GetUserCredit(**self.get_data(), **data)
         return result
 
+    def get_credit2(self):
+        return self.client.service.GetUserCredit2(**self.get_data())
+
     def get_details(self, targetUsername):
         data = {
             'targetUsername': targetUsername
@@ -102,6 +105,9 @@ class Users:
     def get_expire_date(self):
         result = self.client.service.GetExpireDate(**self.get_data())
         return result
+
+    def get_en_expire_date(self):
+        return self.client.service.GetEnExpireDate(**self.get_data())
 
     def get_transactions(self, targetUsername, creditType, dateFrom, dateTo, keyword):
         data = {
