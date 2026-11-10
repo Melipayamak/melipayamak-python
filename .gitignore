@@ -1,2 +1,5 @@
+build/
+dist/
 __pycache__
 test.py
+*.egg-info

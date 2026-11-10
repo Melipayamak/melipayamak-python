@@ -1,0 +1,19 @@
+[project]
+name = "melipayamakwebservice"
+version = "2.0.0"
+authors = [
+  { name="Amirhossein Mehrvarzi", email="melipayamak@gmail.com" },
+]
+description = "Melipayamak Web Service Wrapper (Soap and Rest) for both Sync and Async modes"
+readme = "readme.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/Melipayamak/melipayamak-python"
+Issues = "https://github.com/Melipayamak/melipayamak-python/issues/"
