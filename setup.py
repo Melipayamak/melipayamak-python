@@ -5,7 +5,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="melipayamakwebservice",
-    version="2.0.0",
+    version="2.1.0",
     author="Amirhossein Mehrvarzi",
     author_email="melipayamak@gmail.com",
     description="Melipayamak Web Service Wrapper (Soap and Rest) for both Sync and Async modes",
